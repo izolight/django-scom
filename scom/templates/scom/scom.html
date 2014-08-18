@@ -1,0 +1,245 @@
+{% extends 'scom/base.html' %}
+{% block body %}
+	{# Um neue Operator, Server, Source, Alerts hinzuzufügen #}
+	{% block new_data %}
+	<form action="operators/add/" method="post" accept-charset="utf-8" class="form-inline">
+		{% csrf_token %}
+		<div class="form-group">
+			<input type="text" name="operator" placeholder="Operatorkürzel" class="form-control">	
+		</div>
+		<button type="submit" class="btn btn-warning">Operator hinzufügen</button>
+	</form>
+	<br>	
+		<a href="servers/" title=""><button class="btn btn-warning">Server verwalten</button></a>
+	<br>
+	<br>
+	<form action="sources/add/" method="post" accept-charset="utf-8" class="form-inline">
+		{% csrf_token %}
+		<div class="form-group">
+			<input type="text" name="source" placeholder="Source" class="form-control">
+		</div>
+		<button type="submit" class="btn btn-warning">Source hinzufügen</button>
+	</form>
+	<br>
+	<form action="alerts/add/" method="post" accept-charset="utf-8" class="form-inline">
+		{% csrf_token %}
+		<div class="form-group">
+			<input type="text" name="alert" placeholder="Alert" class="form-control">
+		</div>
+		<button type="submit" class="btn btn-warning">Alert hinzufügen</button>
+	</form>
+	{% endblock %}
+
+	{# Haupttabelle für SCOM Aktionsplan #}
+	{% block table %}
+	<table class="table table-condensedtable-striped table-hover">
+		<caption class="text-success"><h2>{{ caption }}</h2></caption>
+		{# Tabellenheader inklusive Sortierfunktion #}
+		<thead>
+			<tr>
+				<form action="" method="post">
+				{% csrf_token %}	
+					<input type="hidden" name="sort" value="datum">					
+					<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+					<th><button type="submit" class="btn btn-info">Datum</button></th>
+				</form>
+				<form action="" method="post">
+				{% csrf_token %}	
+					<input type="hidden" name="sort" value="operator">
+					<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+					<th><button type="submit" class="btn btn-info">Operator</button></th>
+				</form>
+				<form action="" method="post">
+				{% csrf_token %}	
+					<input type="hidden" name="sort" value="server">
+					<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+					<th><button type="submit" class="btn btn-info">Server</button></th>
+				</form>
+				<form action="" method="post">
+				{% csrf_token %}	
+					<input type="hidden" name="sort" value="source">
+					<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+					<th><button type="submit" class="btn btn-info">Source</button></th>
+				</form>
+				<form action="" method="post">
+				{% csrf_token %}	
+					<input type="hidden" name="sort" value="alert">
+					<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+					<th><button type="submit" class="btn btn-info">Alert</button></th>
+				</form>
+				<form action="" method="post">
+				{% csrf_token %}	
+					<input type="hidden" name="sort" value="status">
+					<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+					<th><button type="submit" class="btn btn-info">Status</button></th>
+				</form>
+				<th class="col-sm-5">Aktion</th>
+				<th>
+					<form action="" method="post">
+					{% csrf_token %}				
+						<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+						<input type="hidden" name="filter" value="{&quot;None&quot;: 1}">
+						<button type="submit" class="btn btn-danger">Filter entfernen</button>	
+					</form>
+					<br>
+					<form action="" method="post">
+					{% csrf_token %}				
+						<input type="hidden" name="showall" {% if showall == 'offen' %}value="alle"{% else %}value="offen"{% endif %}>				
+						<button type="submit" {% if showall == 'offen' %}class="btn btn-danger">Alle zeigen{% else %}class="btn btn-success">Offene zeigen{% endif %}</button>			
+					</form>
+				</th>	
+			</tr>
+		</thead>
+		<tbody>
+			{# Erste Reihe für Button neuer Vorfall #}
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><button type="button" class="btn btn-primary toggle_aktion">Neuer Vorfall</button></td>
+			</tr>
+			{# Ausgeblendete Reihe welche Auswahlfelder für neuen Vorfall hat und bei Klick von Button "Neuer Vorfall" erscheint #}
+			<tr class="hidden">
+				<form action="vorfall/add/" method="post" accept-charset="utf-8" class="form-inline">
+				{% csrf_token %}	
+					<div class="form-group">
+					<td></td>
+					<td>
+						<select name="operator" class="form-control">
+							{% for operator in operators %}
+							<option value="{{operator}}">{{operator}}</option>
+							{% endfor %}				
+						</select>
+					</td>
+					<td>
+						<select name="server" class="form-control">
+							{% for server in servers %}
+							<option value="{{server}}">{{server}}</option>
+							{% endfor %}				
+						</select>	
+					</td>
+					<td>
+						<select name="source" class="form-control">
+							{% for source in sources %}
+							<option value="{{source}}">{{source}}</option>
+							{% endfor %}				
+						</select>
+					</td>
+					<td>
+						<select name="alert" class="form-control">
+							{% for alert in alerts %}
+							<option value="{{alert}}">{{alert}}</option>
+							{% endfor %}				
+						</select>					
+					</td>
+					<td>
+						<select name="status" class="form-control">
+							{% for status in stati %}
+							<option value="{{status}}">{{status.get_name_display}}</option>
+							{% endfor %}				
+						</select>
+					</td>
+					<td>
+						<input type="text" name="aktion" placeholder="Aktion" class="form-control">
+					</td>
+					</div>
+					<td>
+						<button type="submit" class="btn btn-success">Vorfall hinzufügen</button>
+					</td>
+				</form>
+			</tr>
+			{# Alle Vorfälle aus DB werden pro Reihe ausgegeben und Felder "Operator, Server, Source, Alert" haben Filterfunktion nach click #}					
+			{% for vorfall in vorfaelle %}
+			<tr>
+				<td>{{vorfall.datum}}</td>
+				<td>
+					<form action="" method="post" role="form">
+					{% csrf_token %}
+						<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+						<input type="hidden" name="filter" value="{&quot;Operator&quot;: {{vorfall.operator.id}}}">
+						<button type="submit" class="btn btn-link">
+						{{vorfall.operator}}
+						</button>
+					</form>
+				</td>
+				<td>
+					<form action="" method="post" role="form">
+					{% csrf_token %}
+						<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+						<input type="hidden" name="filter" value="{&quot;Server&quot;: {{vorfall.server.id}}}">
+						<button type="submit" class="btn btn-link">
+						{{vorfall.server}}
+						</button>
+					</form>
+				</td>
+				<td>
+					<form action="" method="post" role="form">
+					{% csrf_token %}
+						<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+						<input type="hidden" name="filter" value="{&quot;Source&quot;: {{vorfall.source.id}}}">
+						<button type="submit" class="btn btn-link">
+						{{vorfall.source}}
+						</button>
+					</form>
+				</td>
+				<td>
+					<form action="" method="post">
+					{% csrf_token %}
+						<input type="hidden" name="showall" {% if showall == 'offen' %}value="offen"{% else %}value="alle"{% endif %}>
+						<input type="hidden" name="filter" value="{&quot;Alert&quot;: {{vorfall.alert.id}}}">
+						<button type="submit" class="btn btn-link">
+						{{vorfall.alert}}
+						</button>
+					</form>
+				</td>
+				<td>{{vorfall.status.get_name_display}}</td>				
+				<td>					
+					{% for aktion in aktionen %}
+						{% if aktion.vorfall == vorfall %}						
+							<p><b>{{aktion.datum}}</b>, {{aktion.operator}}: {{aktion.name}}</p>						
+						{% endif %}
+					{% endfor %}						
+				</td>
+				<td><button type="button" class="btn btn-primary toggle_aktion">Neue Aktion</button></td>
+			</tr>
+			{# Ausgeblendete Reihe welche Auswahlfelder für neue Aktion haben und bei Klick von Button "Neue Aktion" pro Reihe erscheinen #}
+			<tr class="hidden">
+				<form action="vorfall/{{vorfall.id}}/" method="post" accept-charset="utf-8" class="form-inline">
+					{% csrf_token %}
+					<div class="form-group">
+						<td></td>
+						<td>
+							<select name="operator" class="form-control">
+								{% for operator in operators %}
+								<option value="{{operator}}">{{operator}}</option>
+								{% endfor %}				
+							</select>
+						</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+							<select name="status" class="form-control">
+								{% for status in stati %}
+								<option value="{{status}}">{{status.get_name_display}}</option>
+								{% endfor %}				
+							</select>
+						</td>
+						<td>
+							<input type="text" name="aktion" placeholder="Aktion" class="form-control">
+						</td>
+					</div>
+					<td>
+						<button type="submit" class="btn btn-success">Aktion hinzufügen</button>
+					</td>
+				</form>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endblock %}
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>GELAN-Tools</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css" media="screen">
+        .btn-link {
+            padding: 0px;
+            white-space: normal;
+        }
+    </style>
+</head>
+<body>
+{# Container damit Bootstrap css funktioniert. #}
+{% block container %}<div class="container-fluid">{% endblock %}
+	<br>
+    {# Damit Fehlermeldungen angeziegt werden. #}
+	{% for message in messages %}
+	<h2 class="text-danger">{{message}}</h2>
+	{% endfor %}
+    {# Hier kommt Hauptinhalt der Templates hin. #}
+    {% block body %}
+    {% endblock %}
+</div>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/static/js/scom.js"></script>
+</body>
+</html>

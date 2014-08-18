@@ -1,0 +1,5 @@
+include LICENSE
+include README.rst
+recursive-include scom/static *
+recursive-include scom/templates *
+recursive-include docs *

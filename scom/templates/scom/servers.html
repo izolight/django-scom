@@ -1,0 +1,87 @@
+{% extends 'scom/base.html' %}
+{% block body %}
+{# Um neue Funktionen und OS hinzuzufügen und zu Aktionsplan zu wechseln #}
+<a href="../" title=""><button class="btn btn-warning">SCOM Aktionsplan</button></a>
+<br>
+<br>
+	<form action="../funktionen/add/" method="post" accept-charset="utf-8" class="form-inline">
+		{% csrf_token %}
+		<div class="form-group">
+			<input type="text" name="funktion" placeholder="Funktion" class="form-control">	
+		</div>
+		<button type="submit" class="btn btn-warning">Funktion hinzufügen</button>
+	</form>
+<br>
+	<form action="../os/add/" method="post" accept-charset="utf-8" class="form-inline">
+		{% csrf_token %}
+		<div class="form-group">
+			<input type="text" name="os" placeholder="OS" class="form-control">
+		</div>
+		<button type="submit" class="btn btn-warning">OS hinzufügen</button>
+	</form>
+<br>
+{# Haupttabelle mit Serverliste #}
+<table class="table">
+	<caption>Servers</caption>
+	<thead>
+		<tr>
+			<th>IP</th>
+			<th>Name</th>
+			<th>Funktion</th>
+			<th>OS</th>
+			<th>Virtuell / Physisch</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{# Erste Reihe mit Auswahlfeldern um neuen Server hinzuzufügen #}
+		<tr>
+			<form action="add/" method="post" accept-charset="utf-8" class="form-inline">
+				{% csrf_token %}
+				<div class="form-group">
+					<td><input type="text" name="ip" placeholder="IP" class="form-control"></td>
+					<td><input type="text" name="name" placeholder="Name" class="form-control"></td>
+					<td>
+						<select name="funktion" class="form-control">
+							{% for funktion in funktionen %}
+							<option value="{{funktion.name}}">{{funktion.name}}</option>
+							{% endfor %}				
+						</select>
+					</td>
+					<td>
+						<select name="os" class="form-control">
+							{% for os in oss %}
+							<option value="{{os.name}}">{{os.name}}</option>
+							{% endfor %}				
+						</select>
+					</td>
+					<td><input type="checkbox" name="is_virtual" id="virtual" checked></td>
+				</div>
+				<td>
+					<button type="submit" class="btn btn-success">Server hinzufügen</button>
+				</td>
+			</form>
+		</tr>
+		{# Server aus DB holen #}	
+		{% for server in servers %}
+		<tr>
+			<td>{{ server.ip }}</td>
+			<td>{{ server.name }}</td>
+			<td>{{ server.funktion }}</td>
+			<td>{{ server.os }}</td>
+			<td>
+			{% if server.is_virtual = True %}
+				Virtuell
+			{% else %}
+				Physich
+			{% endif %}
+			</td>
+			{# Link auf Template update_server.html #}
+			<td>
+				<a href="{{server.id}}/" ><button class="btn btn-success">Update Server</button></a>
+			</td>
+		</tr>
+		{% endfor %}		
+	</tbody>
+</table>
+{% endblock %}
