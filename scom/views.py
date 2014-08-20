@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #####################################
 #                                   #
 # Views fuer SCOM Aktionsplan        #
@@ -6,7 +7,7 @@
 # Changed: 13.08.2014               #
 #                                   #
 #####################################
-
+from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import re
@@ -24,7 +25,7 @@ def index(request):
 	# Variablen fuer nur offene Vorfaelle und sortieren nach Datum auf defaults setzen
 	showall = 'offen'
 	sort = 'datum'
-	caption = 'Offene Vorfaelle'
+	caption = 'Offene Vorfälle'
 	caption_filter = ''
 	caption_sort = ''
 

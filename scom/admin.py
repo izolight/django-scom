@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ###############################
 #                             #
 # Admin Seite um Eintraege zu #
