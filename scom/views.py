@@ -88,7 +88,7 @@ def index(request):
 	# alle Vorfaelle
 	else:
 		vorfaelle = vorfaelle.order_by(sort)
-		caption = "Alle Vorfaelle" + caption_filter + caption_sort
+		caption = "Alle Vorfälle" + caption_filter + caption_sort
 		dictionary['vorfaelle'] = vorfaelle
 		dictionary['caption'] = caption
 		return render(request, 'scom/scom.html', dictionary)	
@@ -183,14 +183,14 @@ def get_server_data(request):
 
 	# Input Checks
 	if len(name) == 0 or len(ip) == 0:
-		messages.add_message(request, messages.INFO, 'Fuellen Sie das Formular vollstaendig aus')
+		messages.add_message(request, messages.INFO, 'Füllen Sie das Formular vollstaendig aus')
 		return
 
 	# IP auf gueltigkeit pruefen
 	octet = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
 	ip_regex = re.compile('^' + octet + '\.' + octet + '\.' + octet + '\.' + octet + '$')
 	if not ip_regex.match(ip):
-		messages.add_message(request, messages.INFO, 'Keine gueltige Ip')
+		messages.add_message(request, messages.INFO, 'Keine gültige Ip')
 		return redirect('../')
 
 	return name, ip, funktion, os, is_virtual

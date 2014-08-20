@@ -2,32 +2,41 @@
 {% block body %}
 	{# Um neue Operator, Server, Source, Alerts hinzuzufügen #}
 	{% block new_data %}
-	<form action="operators/add/" method="post" accept-charset="utf-8" class="form-inline">
-		{% csrf_token %}
-		<div class="form-group">
-			<input type="text" name="operator" placeholder="Operatorkürzel" class="form-control">	
+	<div class="row">
+		<!--<div class="col-md-3">
+			<form action="operators/add/" method="post" accept-charset="utf-8" class="form-inline">
+				{% csrf_token %}
+				<div class="form-group">
+					<input type="text" name="operator" placeholder="Operatorkürzel" class="form-control">	
+				</div>
+				<button type="submit" class="btn btn-warning">Operator hinzufügen</button>
+			</form>
+		</div>-->
+		<div class="col-md-3">
+			<form action="sources/add/" method="post" accept-charset="utf-8" class="form-inline">
+				{% csrf_token %}
+				<div class="form-group">
+					<input type="text" name="source" placeholder="Source" class="form-control">
+				</div>
+				<button type="submit" class="btn btn-warning">Source hinzufügen</button>
+			</form>
 		</div>
-		<button type="submit" class="btn btn-warning">Operator hinzufügen</button>
-	</form>
-	<br>	
-		<a href="servers/" title=""><button class="btn btn-warning">Server verwalten</button></a>
-	<br>
-	<br>
-	<form action="sources/add/" method="post" accept-charset="utf-8" class="form-inline">
-		{% csrf_token %}
-		<div class="form-group">
-			<input type="text" name="source" placeholder="Source" class="form-control">
+		<div class="col-md-3">
+			<form action="alerts/add/" method="post" accept-charset="utf-8" class="form-inline">
+				{% csrf_token %}
+				<div class="form-group">
+					<input type="text" name="alert" placeholder="Alert" class="form-control">
+				</div>
+				<button type="submit" class="btn btn-warning">Alert hinzufügen</button>
+			</form>
 		</div>
-		<button type="submit" class="btn btn-warning">Source hinzufügen</button>
-	</form>
-	<br>
-	<form action="alerts/add/" method="post" accept-charset="utf-8" class="form-inline">
-		{% csrf_token %}
-		<div class="form-group">
-			<input type="text" name="alert" placeholder="Alert" class="form-control">
+		<div class="col-md-2">
+			<a href="servers/" title=""><button class="btn btn-warning">Server verwalten</button></a>
 		</div>
-		<button type="submit" class="btn btn-warning">Alert hinzufügen</button>
-	</form>
+		<div class="col-md-2">
+			<a href="../../admin" title=""><button class="btn btn-danger">Admin Interface</button></a>
+		</div>
+	</div>		
 	{% endblock %}
 
 	{# Haupttabelle für SCOM Aktionsplan #}
