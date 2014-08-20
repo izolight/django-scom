@@ -125,7 +125,7 @@
 					<td>
 						<select name="source" class="form-control">
 							{% for source in sources %}
-							<option value="{{source}}">{{source}}</option>
+							<option value="{{source|urlencode}}">{{source}}</option>
 							{% endfor %}				
 						</select>
 					</td>

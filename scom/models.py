@@ -9,22 +9,23 @@
 #####################################
 
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
-
+@python_2_unicode_compatible
 class Funktion(models.Model):
 	name = models.CharField(max_length=50)
 
 	def __str__(self):
 		return self.name
 
-
+@python_2_unicode_compatible
 class OS(models.Model):
 	name = models.CharField(max_length=30)
 
 	def __str__(self):
 		return self.name
 
-
+@python_2_unicode_compatible
 class Server(models.Model):
 	name = models.CharField(max_length=30)
 	ip = models.IPAddressField()
@@ -38,7 +39,7 @@ class Server(models.Model):
 	class Meta:
 		ordering = ['name']	
 
-
+@python_2_unicode_compatible
 class Source(models.Model):
 	name = models.CharField(max_length=100)
 
@@ -48,7 +49,7 @@ class Source(models.Model):
 	class Meta:
 		ordering = ['name']
 
-
+@python_2_unicode_compatible
 class Alert(models.Model):
 	name = models.CharField(max_length=200)
 
@@ -58,7 +59,7 @@ class Alert(models.Model):
 	class Meta:
 		ordering = ['name']
 
-
+@python_2_unicode_compatible
 class Operator(models.Model):
 	name = models.CharField(max_length=4)
 
@@ -68,7 +69,7 @@ class Operator(models.Model):
 	class Meta:
 		ordering = ['name']
 
-
+@python_2_unicode_compatible
 class Status(models.Model):
 	STATI = (('O','Offen'),('G', 'Geschlossen'))
 	name = models.CharField(max_length=1,choices=STATI,default='O')
@@ -80,7 +81,7 @@ class Status(models.Model):
 		verbose_name_plural = 'Stati'
 		ordering = ['name']
 
-
+@python_2_unicode_compatible
 class Vorfall(models.Model):
 	datum = models.DateField()
 	operator = models.ForeignKey(Operator)
@@ -95,7 +96,7 @@ class Vorfall(models.Model):
 	class Meta:
 		verbose_name_plural = 'Vorfaelle'
 
-
+@python_2_unicode_compatible
 class Aktion(models.Model):
 	datum = models.DateField()
 	operator = models.ForeignKey(Operator)

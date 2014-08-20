@@ -14,11 +14,12 @@ import re
 from datetime import date
 import json
 
-# import logging # fuer Debugging
+import logging # fuer Debugging
 
 from scom.models import *
 
-# logger = logging.getLogger(__name__) # fuer Debugging
+logging.basicConfig()
+logger = logging.getLogger(__name__) # fuer Debugging
 
 # Hauptseite
 def index(request):
